@@ -67,20 +67,18 @@ vim.g.zig_fmt_parse_errors = 0
 -- NOTE: wierdly vim.o.list is what controls the display of whitespace characters
 vim.o.list = false
 
-if vim.g.neovide then
-	vim.g.neovide_cursor_animation_length = 0
-	vim.g.neovide_cursor_trail_size = 0
-	vim.g.neovide_cursor_animate_command_line = true
-	vim.g.neovide_scroll_animation_length = 0.15
-	vim.g.neovide_refresh_rate = 144
-	vim.g.neovide_position_animation_length = 0
-	vim.o.guifont = "CaskaydiaMono_NF:Medium:h13:#e-subpixelantialias"
-	vim.g.neovide_opacity = 1.00
-	vim.g.neovide_normal_opacity = 1.00
-	vim.g.neovide_remember_window_size = true
-	-- This full screen implies taking up all screenspace including task bar and title bar
-	-- vim.g.neovide_fullscreen = true
-end
+vim.g.neovide_cursor_animation_length = 0
+vim.g.neovide_cursor_trail_size = 0
+vim.g.neovide_cursor_animate_command_line = true
+vim.g.neovide_scroll_animation_length = 0.15
+vim.g.neovide_refresh_rate = 144
+vim.g.neovide_position_animation_length = 0
+vim.o.guifont = "CaskaydiaMono_NF:Medium:h14:#e-subpixelantialias"
+vim.g.neovide_opacity = 1.00
+vim.g.neovide_normal_opacity = 1.00
+vim.g.neovide_remember_window_size = true
+-- This full screen implies taking up all screenspace including task bar and title bar
+-- vim.g.neovide_fullscreen = true
 
 vim.g.juliana_extensions = {
 	semantic_tokens = true,

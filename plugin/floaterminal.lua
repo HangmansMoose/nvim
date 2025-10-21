@@ -1,195 +1,255 @@
-vim.keymap.set('t', '<esc><esc>', '<c-\\><c-n>')
+vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
 vim.opt.shell = "pwsh"
 
 TermJobId = 0
 
-vim.api.nvim_create_autocmd('TermOpen', {
-  group = vim.api.nvim_create_augroup('custom-term-open', { clear = true }),
-  callback = function()
-    vim.opt.number = false
-    vim.opt.relativenumber = false
-    TermJobId = vim.bo.channel
-  end,
+vim.api.nvim_create_autocmd("TermOpen", {
+	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
+	callback = function()
+		vim.opt.number = false
+		vim.opt.relativenumber = false
+		TermJobId = vim.bo.channel
+	end,
 })
 
 -- small terminal
-vim.keymap.set('n', '<leader>st', function()
-  vim.cmd.vnew() -- new split
-  vim.cmd.term() -- opens terminal in new split
-  vim.cmd.wincmd 'J' -- puts the window at the bottom
-  vim.api.nvim_win_set_height(0, 15) -- rows and columns not pixels
+vim.keymap.set("n", "<leader>st", function()
+	vim.cmd.vnew() -- new split
+	vim.cmd.term() -- opens terminal in new split
+	vim.cmd.wincmd("J") -- puts the window at the bottom
+	vim.api.nvim_win_set_height(0, 15) -- rows and columns not pixels
 end)
 
 local state = {
-  static = {
-	  buf = -1,
-	  win = -1
-  },
-  floating = {
-    buf = -1,
-    win = -1,
-  },
+	static = {
+		buf = -1,
+		win = -1,
+	},
+	floating = {
+		buf = -1,
+		win = -1,
+	},
 }
 
 local function create_floating_window(opts)
-  opts = opts or {}
-  local width = opts.width or math.floor(vim.o.columns * 0.8)
-  local height = opts.height or math.floor(vim.o.lines * 0.8)
+	opts = opts or {}
+	local width = opts.width or math.floor(vim.o.columns * 0.8)
+	local height = opts.height or math.floor(vim.o.lines * 0.8)
 
-  -- Calculate the position to center the window
-  local col = math.floor((vim.o.columns - width) / 2)
-  local row = math.floor((vim.o.lines - height) / 2)
+	-- Calculate the position to center the window
+	local col = math.floor((vim.o.columns - width) / 2)
+	--local row = math.floor((vim.o.lines - height) / 2)
+	local row = vim.o.lines - height
 
-  -- Create a buffer
-  local buf = nil
-  if vim.api.nvim_buf_is_valid(opts.buf) then
-    buf = opts.buf
-  else
-    buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
-  end
+	-- Create a buffer
+	local buf = nil
+	if vim.api.nvim_buf_is_valid(opts.buf) then
+		buf = opts.buf
+	else
+		buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
+	end
 
-  -- Define window configuration
-  local win_config = {
-    relative = 'editor',
-    width = width,
-    height = height,
-    col = col,
-    row = row,
-    style = 'minimal', -- No borders or extra UI elements
-    border = 'rounded',
-  }
+	-- Define window configuration
+	local win_config = {
+		relative = "editor",
+		width = width,
+		height = height,
+		col = col,
+		row = row,
+		style = "minimal", -- No borders or extra UI elements
+		border = "rounded",
+	}
 
-  -- Create the floating window
-  local win = vim.api.nvim_open_win(buf, true, win_config)
+	-- Create the floating window
+	local win = vim.api.nvim_open_win(buf, true, win_config)
 
-  return { buf = buf, win = win }
+	return { buf = buf, win = win }
 end
 
 local function create_static_window(opts)
-  opts = opts or {}
-  local width = opts.width or math.floor(vim.o.columns * 0.5)
-  local height = opts.height or math.floor(vim.o.lines * 0.3)
+	opts = opts or {}
+	local width = opts.width or math.floor(vim.o.columns * 0.5)
+	local height = opts.height or vim.o.lines
 
-  -- Calculate the position to center the window
-  --local col = math.floor((vim.o.columns - width) / 2)
-  --local row = math.floor((vim.o.lines - height) / 2)
+	-- Calculate the position to center the window
+	--local col = math.floor((vim.o.columns - width) / 2)
+	--local row = math.floor((vim.o.lines - height) / 2)
 
-  -- Create a buffer
-  local buf = nil
-  if vim.api.nvim_buf_is_valid(opts.buf) then
-    buf = opts.buf
-  else
-    buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
-  end
+	-- Create a buffer
+	local buf = nil
+	if vim.api.nvim_buf_is_valid(opts.buf) then
+		buf = opts.buf
+	else
+		buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
+	end
 
-  -- Define window configuration
-  local win_config = {
-	  split = 'below',
-	  win = 0,
-	  width = width,
-	  height = height
-  }
+	-- Define window configuration
+	local win_config = {
+		split = "below",
+		win = 0,
+		width = width,
+		height = height,
+	}
 
+	-- Create the floating window
+	local win = vim.api.nvim_open_win(buf, true, win_config)
 
-  -- Create the floating window
-  local win = vim.api.nvim_open_win(buf, true, win_config)
-
-  return { buf = buf, win = win }
+	return { buf = buf, win = win }
 end
-
 
 local toggle_static_terminal = function()
 	if not vim.api.nvim_win_is_valid(state.static.win) then
-	  state.static = create_static_window { buf = state.static.buf }
-	  if vim.bo[state.static.buf].buftype ~= 'terminal' then
-		vim.cmd.term()
-		TermJobId = vim.bo.channel
-	  end
-    else
-      vim.api.nvim_win_hide(state.static.win)
-    end
+		state.static = create_static_window({ buf = state.static.buf })
+		if vim.bo[state.static.buf].buftype ~= "terminal" then
+			vim.cmd.term()
+			TermJobId = vim.bo.channel
+		end
+	else
+		vim.api.nvim_win_hide(state.static.win)
+	end
 end
 
 local toggle_floating_terminal = function()
- 
-  if not vim.api.nvim_win_is_valid(state.floating.win) then
-    state.floating = create_floating_window { buf = state.floating.buf }
-    if vim.bo[state.floating.buf].buftype ~= 'terminal' then
-      vim.cmd.term()
-      TermJobId = vim.bo.channel
-      print('job_id: ', TermJobId)
-    end
-  else
-    vim.api.nvim_win_hide(state.floating.win)
-  end
+	if not vim.api.nvim_win_is_valid(state.floating.win) then
+		state.floating = create_floating_window({ buf = state.floating.buf })
+		if vim.bo[state.floating.buf].buftype ~= "terminal" then
+			vim.cmd.term()
+			TermJobId = vim.bo.channel
+			print("job_id: ", TermJobId)
+		end
+	else
+		vim.api.nvim_win_hide(state.floating.win)
+	end
 end
 
 local function find_build_sh()
-  local found = false
-  while not found do
-    if vim.fn.filereadable 'build.sh' then
-        found = true
-    else
-        vim.cmd 'cd ..'
-     end
-  end
+	local found = false
+	while not found do
+		if vim.fn.filereadable("build.sh") then
+			found = true
+		else
+			vim.cmd("cd ..")
+		end
+	end
 end
 
 local function find_build_bat()
-  local found = false
-  while not found do
-    if vim.fn.filereadable 'build.bat' then
-       found = true 
-    else
-      vim.cmd 'cd ..'
-    end
-  end
+	local cwd = vim.fn.getcwd()
+	local path_sep = package.config:sub(1, 1) -- '/' on Unix, '\' on Windows
+
+	local function exists(path)
+		return vim.fn.filereadable(path) == 1
+	end
+
+	while cwd and #cwd > 0 do
+		local candidate = cwd .. path_sep .. "build.bat"
+		if exists(candidate) then
+			return candidate
+		end
+		local parent = vim.fn.fnamemodify(cwd, ":h")
+		if parent == cwd then
+			break
+		end
+		cwd = parent
+	end
+
+	return nil
 end
 
 local build_project = function()
-  local os_name =  vim.loop.os_uname().sysname
-  local file_ext = vim.fn.expand('%:e')
-  if file_ext == 'cpp' or file_ext == 'c' or file_ext == 'h' or file_ext == 'hpp' or
-     file_ext == 'rs' or file_ext == 'zig' or file_ext == 'zon' then
-    local file_dir = vim.fn.expand('%:h')
-	local changeDir = "cd " .. file_dir .. "\r\n"
-	toggle_static_terminal()
-	vim.fn.chansend(TermJobId, { changeDir })
-    if os_name == "Linux" or os_name == "Darwin" or os_name == "OpenBSD" then
-        find_build_sh()
-	    vim.fn.chansend(TermJobId, { './build.sh\r\n' })
-    elseif os_name == "Windows_NT" then
-        find_build_bat()
-	    vim.fn.chansend(TermJobId, { './build.bat\r\n' })
-    else  
-	    print("Can't figure out what operating system you are on")
-    end
-  end
+	--	local os_name = vim.loop.os_uname().sysname
+	local file_ext = vim.fn.expand("%:e")
+	if
+		file_ext == "cpp"
+		or file_ext == "c"
+		or file_ext == "h"
+		or file_ext == "hpp"
+		or file_ext == "rs"
+		or file_ext == "zig"
+		or file_ext == "zon"
+	then
+		local build_bat = find_build_bat()
+		if not build_bat then
+			vim.notify("No build.bat found in current or parent directories.", vim.log.levels.WARN)
+			return
+		end
+		local win_run = string.format('cmd /c "%s"\r\n', build_bat)
+		--local nix_run = string.format('bash -c "%s"\r\n', build_sh)
+		toggle_static_terminal()
+		-- TODO: Come back and make this multiplatform
+		vim.fn.chansend(TermJobId, win_run)
+		--if os_name == "Linux" or os_name == "Darwin" or os_name == "OpenBSD" then
+		--    find_build_sh()
+		--    vim.fn.chansend(TermJobId, { './build.sh\r\n' })
+		--elseif os_name == "Windows_NT" then
+		--    find_build_bat()
+		--    vim.fn.chansend(TermJobId, { './build.bat\r\n' })
+		--else
+		--    print("Can't figure out what operating system you are on")
+		--end
+	end
 end
 -- helper functions to find and launch run debug.bat
 local function find_debug_bat()
-  if not vim.fn.filereadable 'debug.bat' then
-    vim.cmd 'cd ../'
-    find_debug_bat()
-  end
+	local cwd = vim.fn.getcwd()
+	local path_sep = package.config:sub(1, 1) -- '/' on Unix, '\' on Windows
+
+	local function exists(path)
+		return vim.fn.filereadable(path) == 1
+	end
+
+	while cwd and #cwd > 0 do
+		local candidate = cwd .. path_sep .. "debug.bat"
+		if exists(candidate) then
+			return candidate
+		end
+		local parent = vim.fn.fnamemodify(cwd, ":h")
+		if parent == cwd then
+			break
+		end
+		cwd = parent
+	end
 end
 
 local run_debug_bat = function()
-	local cwd = vim.fn.getcwd()
-	local changeDir = "cd " .. cwd .. "\r\n"
-	toggle_static_terminal()
-	vim.fn.chansend(TermJobId, { changeDir })
-	find_debug_bat()
-	vim.fn.chansend(TermJobId, {'./debug.bat\r\n' })
-	toggle_static_terminal()
-end
+	local script = find_debug_bat()
+	if not script then
+		vim.notify("No debug.bat found in current or parent directories.", vim.log.levels.WARN)
+		return
+	end
 
+	vim.notify("Running " .. script .. "...", vim.log.levels.INFO)
+
+	-- Execute via Windows shell
+	local cmd = string.format('cmd /c "%s"', script)
+	vim.fn.jobstart(cmd, {
+		stdout_buffered = true,
+		stderr_buffered = true,
+		on_stdout = function(_, data)
+			if data then
+				vim.api.nvim_out_write(table.concat(data, "\n") .. "\n")
+			end
+		end,
+		on_stderr = function(_, data)
+			if data then
+				vim.api.nvim_err_write(table.concat(data, "\n") .. "\n")
+			end
+		end,
+		on_exit = function(_, code)
+			if code == 0 then
+				vim.notify("debugging completed successfully.", vim.log.levels.INFO)
+			else
+				vim.notify("debugger failed (exit code " .. code .. ").", vim.log.levels.ERROR)
+			end
+		end,
+	})
+end
 
 -- Example usage:
 -- Create a floating window with default dimensions
-vim.api.nvim_create_user_command('Floaterminal', toggle_floating_terminal, {})
-vim.api.nvim_create_user_command('StaticTerminal', toggle_static_terminal, {})
-vim.keymap.set({ 'n', 't' }, '<space>tf', toggle_floating_terminal)
-vim.keymap.set({ 'n', 't' }, '<space>t', toggle_static_terminal)
-vim.keymap.set({ 'n', 't' }, '<space>m', build_project)
-vim.keymap.set({ 'n', 't' }, '<space>r', run_debug_bat)
+vim.api.nvim_create_user_command("Floaterminal", toggle_floating_terminal, {})
+vim.api.nvim_create_user_command("StaticTerminal", toggle_static_terminal, {})
+vim.keymap.set({ "n", "t" }, "<space>tf", toggle_floating_terminal)
+vim.keymap.set({ "n", "t" }, "<space>t", toggle_static_terminal)
+vim.keymap.set({ "n", "t" }, "<space>m", build_project)
+vim.keymap.set({ "n", "t" }, "<space>r", run_debug_bat)

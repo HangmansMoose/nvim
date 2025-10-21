@@ -222,7 +222,9 @@ return {
 				clangd = {
 					cmd = {
 						"G:/dev_tools/LLVM/bin/clangd.exe",
+						"--background-index",
 						"--header-insertion=never",
+						"--no-unused-includes",
 					},
 				},
 				zls = {},

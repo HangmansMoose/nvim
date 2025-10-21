@@ -5,4 +5,4 @@ require("config.lazy")
 
 local colors = require("utils.colors")
 
-colors.ColorMyPencils("jellybeans-nvim")
+colors.ColorMyPencils("custom")
