@@ -8,19 +8,11 @@ return {
 		lazy = false,
 	},
 	{
-		"logannday/gruber-darker-nvim",
-		lazy = false,
-	},
-	{
 		"bluz71/vim-nightfly-colors",
 		lazy = false,
 	},
 	{
 		"bluz71/vim-moonfly-colors",
-		lazy = false,
-	},
-	{
-		"Shatur/neovim-ayu",
 		lazy = false,
 	},
 	{
@@ -34,29 +26,6 @@ return {
 	{
 		"HoNamDuong/hybrid.nvim",
 		lazy = false,
-	},
-
-	{ "vim-scripts/newsprint.vim", lazy = false },
-	{ "gbprod/nord.nvim", lazy = false },
-	{ "slugbyte/lackluster.nvim", lazy = false },
-	{ "vim-scripts/zenesque.vim", lazy = false },
-	{ "jaredgorski/fogbell.vim", lazy = false },
-	{ "oahlen/iceberg.nvim", lazy = false },
-	{ "Skardyy/makurai-nvim", lazy = false },
-	{ "jnurmine/Zenburn", lazy = false },
-	{ "RRethy/base16-nvim", lazy = false },
-	{
-		"sainnhe/gruvbox-material",
-		config = function()
-			vim.g.gruvbox_material_background = "hard"
-		end,
-	},
-	{
-		"zenbones-theme/zenbones.nvim",
-		dependencies = "rktjmp/lush.nvim",
-		lazy = false,
-		priority = 1000,
-		italic = false,
 	},
 	{
 		"vague2k/vague.nvim",

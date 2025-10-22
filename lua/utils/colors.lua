@@ -8,6 +8,10 @@ function M.ColorMyPencils(color)
 	vim.cmd("hi cTodo guibg=NONE")
 	vim.cmd("hi Todo guibg=NONE")
 
+	if color == "gruber-darker" then
+		vim.cmd("hi Comment guifg=#6f7b68")
+	end
+
 	if color == "naysayer" then
 		vim.cmd("hi Normal guibg=#151515")
 		vim.cmd("hi NormalNC guibg=#151515")
