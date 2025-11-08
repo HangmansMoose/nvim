@@ -48,4 +48,4 @@ vim.api.nvim_set_keymap('n', '<S-F6>',
 
 -- Toggle compiler results
 vim.api.nvim_set_keymap('n', '<S-F7>', "<cmd>CompilerToggleResults<cr>", { noremap = true, silent = true })
-vim.keymap.set('n', '<A-c>', require("utils.colors").select_colorscheme, { noremap = true, silent = true, desc = "Select Colorscheme" })
+-- vim.keymap.set('n', '<A-c>', require("utils.colors").select_colorscheme, { noremap = true, silent = true, desc = "Select Colorscheme" })

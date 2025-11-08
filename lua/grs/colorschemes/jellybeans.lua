@@ -1,12 +1,5 @@
 return {
 	{
-		"metalelf0/jellybeans-nvim",
-		lazy = false,
-		dependecies = {
-			"rktjmp/lush.nvim",
-		},
-	},
-	{
 		"WTFox/jellybeans.nvim",
 		lazy = false,
 		config = function()
@@ -33,7 +26,7 @@ return {
 					hl.SnacksNormalNC = { bg = "#151515" }
 					hl.SnacksPicker = { bg = "#151515" }
 					hl.SnacksExplorer = { bg = "#151515" }
-					hl.Comment = { fg = "#666666" }
+					hl.Comment = { fg = "#6f7b68" }
 				end,
 			})
 		end,

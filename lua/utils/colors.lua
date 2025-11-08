@@ -10,6 +10,48 @@ function M.ColorMyPencils(color)
 
 	if color == "gruber-darker" then
 		vim.cmd("hi Comment guifg=#6f7b68")
+		vim.cmd("hi @comment guifg=#6f7b68")
+		vim.cmd("hi Normal guibg=#101010")
+		vim.cmd("hi NormalNC guibg=#101010")
+		vim.cmd("hi LineNr guibg=#101010")
+		vim.cmd("hi CursorLine guibg=#101010")
+		vim.cmd("hi TelescopeNormal guibg=#101010")
+		vim.cmd("hi SnacksNormal guibg=#101010")
+		vim.cmd("hi SnacksPicker guibg=#101010")
+		vim.cmd("hi SnacksPickerBoxBorder guibg=#101010")
+		vim.cmd("hi SnacksNormalNC guibg=#101010")
+		vim.cmd("hi TroubleNormal guibg=#101010")
+		vim.cmd("hi TroubleNormalNC guibg=#101010")
+		vim.cmd("hi TroubleIndent guibg=#101010")
+		vim.cmd("hi TroublePos guibg=#101010")
+		vim.cmd("hi Comment guifg=#6f7b68")
+		vim.cmd("hi LineNrAbove guifg=#666666")
+		vim.cmd("hi LineNrBelow guifg=#666666")
+		vim.cmd("hi MatchParen guibg=#777777")
+		vim.cmd("hi Delimiter guifg=#666666")
+	end
+
+	if color == "jellybeans" then
+		vim.cmd("hi Comment guifg=#6f7b68")
+		vim.cmd("hi @lsp.type.variable guifg=#e8e8d3")
+	end
+
+	if color == "melange" then
+		vim.cmd("hi Normal guibg=#151515")
+		vim.cmd("hi NormalNC guibg=#151515")
+		vim.cmd("hi LineNr guibg=#151515")
+		vim.cmd("hi TelescopeNormal guibg=#151515")
+		vim.cmd("hi SnacksNormal guibg=#151515")
+		vim.cmd("hi SnacksPicker guibg=#151515")
+		vim.cmd("hi SnacksPickerBoxBorder guibg=#151515")
+		vim.cmd("hi SnacksNormalNC guibg=#151515")
+		vim.cmd("hi Comment guifg=#6f7b68")
+		vim.cmd("hi LineNrAbove guifg=#666666")
+		vim.cmd("hi LineNrBelow guifg=#666666")
+		vim.cmd("hi MatchParen guibg=#999999 guifg=#303030")
+		vim.cmd("hi Delimiter guifg=#666666")
+
+		--vim.cmd'hi String guifg=#2CA198'
 	end
 
 	if color == "naysayer" then
@@ -56,55 +98,19 @@ function M.ColorMyPencils(color)
 
 	-- Transparency regardless of colorscheme
 	-- In lua ~= is not equal to
-	if vim.loop.os_uname().sysname ~= "Windows_NT" then
-		vim.cmd("hi Normal guibg=NONE")
-		vim.cmd("hi NormalNC  guibg=NONE")
-		vim.cmd("hi SnacksNormal guibg=NONE")
-		vim.cmd("hi SnacksPicker guibg=NONE")
-		vim.cmd("hi SnacksPickerBoxBorder guibg=NONE")
-		vim.cmd("hi NormalFloat guibg=NONE")
-		vim.cmd("hi LineNr guibg=NONE")
-		vim.cmd("hi CursorLineNr guibg=NONE guifg=#FFA717")
-		vim.cmd("hi StatusLine guibg=NONE")
-		vim.cmd("hi NoiceCmdlineIcon guibg=NONE")
-		--vim.cmd'hi FloatBorder guibg=NONE'
-	end
+	--if vim.loop.os_uname().sysname ~= "Windows_NT" then
+	--	vim.cmd("hi Normal guibg=NONE")
+	--	vim.cmd("hi NormalNC  guibg=NONE")
+	--	vim.cmd("hi SnacksNormal guibg=NONE")
+	--	vim.cmd("hi SnacksPicker guibg=NONE")
+	--	vim.cmd("hi SnacksPickerBoxBorder guibg=NONE")
+	--	vim.cmd("hi NormalFloat guibg=NONE")
+	--	vim.cmd("hi LineNr guibg=NONE")
+	--	vim.cmd("hi CursorLineNr guibg=NONE guifg=#FFA717")
+	--	vim.cmd("hi StatusLine guibg=NONE")
+	--	vim.cmd("hi NoiceCmdlineIcon guibg=NONE")
+	--	--vim.cmd'hi FloatBorder guibg=NONE'
+	--end
 end
-
--- List of colorschemes
-local colorschemes = {
-	"gruvbox",
-	"adwaita",
-	"jellybeans",
-	"juliana",
-	"monokai-v2",
-	"mudworld",
-	"naysayer",
-	"neohybrid",
-	"nightwolf",
-	"kanagawa",
-	"kanagawa-wave",
-	"kanagawa-dragon",
-	"kanagawa-paper",
-	"nordic",
-	"rusty",
-	"stoics",
-}
-
--- Function to prompt for colorscheme selection
-function M.select_colorscheme()
-	vim.ui.select(colorschemes, {
-		prompt = "Select a colorscheme:",
-		format_item = function(item)
-			return item
-		end,
-	}, function(choice)
-		if choice then
-			M.ColorMyPencils(choice)
-		end
-	end)
-end
-
--- Set keybinding
 
 return M

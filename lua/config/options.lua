@@ -31,7 +31,7 @@ vim.opt.updatetime = 100 -- faster completion (4000ms default)
 vim.opt.writebackup = false -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
 vim.opt.expandtab = true -- convert tabs to spaces
 vim.opt.shiftwidth = 4 -- the number of spaces inserted for each indentation
-vim.opt.cursorline = true -- highlight the current line
+vim.opt.cursorline = false -- highlight the current line
 vim.opt.number = true -- set numbered lines
 vim.opt.breakindent = false -- wrap lines with indent
 vim.opt.relativenumber = true -- set relative numbered lines
@@ -58,6 +58,8 @@ vim.opt.tabstop = 4 -- insert 2 spaces for a tab
 vim.o.inccommand = "split" -- Preview substitutions as you type them
 
 vim.opt.fillchars = "vert:┃,horiz:━,verthoriz:╋,horizup:┻,horizdown:┳,vertleft:┫,vertright:┣,eob: " -- more obvious separator
+
+vim.diagnostic.enable(true)
 
 -- Currently saving Zig projects can freeze neovim. Community is pretty sure the root cause is then zig LSP and autoformatting
 -- This should stop it
