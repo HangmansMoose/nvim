@@ -1,18 +1,22 @@
 return {
+	{
+		"taku25/tree-sitter-unreal-cpp",
+		opts = {},
+		config = function() end,
+	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs", -- Sets main module to use for opts
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter
-		config = function()
-			require("nvim-treesitter.install").compilers = { "zig", "clang" }
-		end,
 		opts = {
 			-- Autoinstall languages that are not installed
 			install = {
 				compilers = { "zig", "clang" },
 			},
 			ensure_installed = {
+                "regex",
 				"python",
 				"lua",
 				"yaml",

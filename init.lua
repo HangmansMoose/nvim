@@ -1,8 +1,9 @@
 require("config.options")
 require("config.autocmds")
 require("config.keybinds")
+require("config.lsp")
 require("config.lazy")
 
 local colors = require("utils.colors")
 
-colors.ColorMyPencils("gruber-darker")
+colors.ColorMyPencils("jellybeans")
