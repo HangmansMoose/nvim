@@ -84,6 +84,31 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- UI2 ==============================================================================================
+require('vim._core.ui2').enable({
+  enable = true, -- Whether to enable or disable the UI.
+  msg = { -- Options related to the message module.
+    ---@type 'cmd'|'msg' Default message target, either in the
+    ---cmdline or in a separate ephemeral message window.
+    ---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target
+    ---or table mapping |ui-messages| kinds and triggers to a target.
+    targets = 'cmd',
+    cmd = { -- Options related to messages in the cmdline window.
+      height = 0.5 -- Maximum height while expanded for messages beyond 'cmdheight'.
+    },
+    dialog = { -- Options related to dialog window.
+      height = 0.5, -- Maximum height.
+    },
+    msg = { -- Options related to msg window.
+      height = 0.5, -- Maximum height.
+      timeout = 4000, -- Time a message is visible in the message window.
+    },
+    pager = { -- Options related to message window.
+      height = 1, -- Maximum height.
+    },
+  },
+})
+
 -- ============================================================
 -- SECTION 1: OPTIONS
 -- Core Neovim settings, leaders, options, basic keymaps, basic autocmds
@@ -99,7 +124,7 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -155,7 +180,7 @@ do
   --  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
   --   See `:help lua-options`
   --   and `:help lua-guide-options`
-  vim.o.list = true
+  vim.o.list = false
   vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
   -- Preview substitutions live, as you type!
@@ -171,6 +196,25 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  vim.o.breakindent = true
+  vim.o.tabstop = 4
+  vim.o.shiftwidth = 4
+
+  vim.opt.swapfile = false
+
+  -- Neovide ===============================================================
+  vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_cursor_trail_size = 0
+  vim.g.neovide_cursor_animate_command_line = true
+  vim.g.neovide_scroll_animation_length = 0.15
+  vim.g.neovide_refresh_rate = 144
+  vim.g.neovide_position_animation_length = 0
+  vim.o.guifont = "CaskaydiaMono_NF:Medium:h13:#e-subpixelantialias"
+  vim.g.neovide_opacity = 1.00
+  vim.g.neovide_normal_opacity = 1.00
+  vim.g.neovide_title_background_color = "#050505"
+
 end
 
 -- ============================================================
@@ -393,7 +437,8 @@ do
   -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+  -- vim.cmd.colorscheme 'tokyonight-night'
+
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -692,10 +737,16 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
-    -- gopls = {},
-    -- pyright = {},
-    -- rust_analyzer = {},
+     clangd = {
+       "clangd",
+       "--background-index",
+       "--header-insertion=never",
+       "-j=4",
+     },
+     gopls = {},
+     pyright = {},
+     rust_analyzer = {},
+     ols = {},
     --
     -- Some languages (like typescript) have entire language plugins that can be useful:
     --    https://github.com/pmizio/typescript-tools.nvim
@@ -965,7 +1016,62 @@ do
   --
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
-  --
+  vim.pack.add({
+    'https://github.com/WTFox/jellybeans.nvim',
+    'https://github.com/blazkowolf/gruber-darker.nvim',
+    'https://github.com/rebelot/kanagawa.nvim',
+    'https://github.com/alljokecake/naysayer-theme.nvim',
+    'https://github.com/savq/melange-nvim',
+    'https://github.com/tjdevries/colorbuddy.nvim',
+    'https://github.com/54L1M/Oshen.nvim',
+    'https://github.com/szymonwilczek/arete.nvim'
+  })
+  -- Load the colorscheme here.
+  -- Like many other themes, this one has different styles, and you could load
+  -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  local colours = require('utils.colors')
+  colours.CustomColourscheme('kujukuju')
+
+  vim.api.nvim_create_user_command("Colour", function(args)
+      local scheme = args.fargs[1]
+      colours.CustomColourscheme(scheme)
+    end,
+    {
+      nargs = "?",
+      complete = "color"
+    }
+  )
+  --if vim.g.neovide then
+  --  vim.g.neovide_title_background_color = string.format(
+  --    "%x",
+  --    vim.api.nvim_get_hl(0, {id=vim.api.nvim_get_hl_id_by_name("Normal")}).bg
+  --  )
+  --end
+  -- Highlight todo, notes, etc in comments
+  vim.pack.add { gh 'folke/todo-comments.nvim' }
+  require('todo-comments').setup {
+    keywords = {
+			TODO = { color = "#ff0000" },
+			HACK = { color = "#ff6600" },
+			NOTE = { color = "#008000" },
+			FIXME = { color = "#f06292" },
+			LEFTOFF = { color = "#ffff99" },
+			nocheckin = { color = "#ff00ff" },
+		},
+				-- Pattern to hightlight the keywords
+		highlight = {
+			pattern = [[(KEYWORDS|keywords)\s*(\([^\)]*\))?:]],
+			keyword = "fg",
+			after = "",
+			before = "",
+		},
+		gui_style = {
+			fg = "BOLD",
+		},
+    signs = false, 
+  }
+
+
   -- require 'kickstart.plugins.debug'
   -- require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
@@ -978,6 +1084,7 @@ do
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   -- require 'custom.plugins'
 end
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
