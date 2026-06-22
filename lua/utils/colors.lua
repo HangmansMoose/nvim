@@ -28,6 +28,24 @@ function M.CustomColourscheme(color)
 		vim.cmd("hi MiniTablineModifiedVisible guibg=#000000")
 	end
 
+	if color == "kanagawa" or "kanagawa-wave" then
+		vim.cmd("hi Comment guifg=#6f7b68")
+		vim.cmd("hi @comment guifg=#6f7b68")
+		vim.cmd("hi Normal guibg=#050505")
+		vim.cmd("hi NormalNC guibg=#050505")
+		vim.cmd("hi LineNr guibg=#050505")
+		vim.cmd("hi CursorLine guibg=#050505")
+		vim.cmd("hi TelescopeNormal guibg=#050505")
+		vim.cmd("hi TelescopeNormalNC guibg=#050505")
+		vim.cmd("hi TelescopeBorder guibg=#050505")
+		vim.cmd("hi TelescopeSelectionCaret guibg=#050505")
+		vim.cmd("hi MiniTablineFill guibg=#050505")
+		vim.cmd("hi MiniTablineModifiedHidden guibg=#050505")
+		vim.cmd("hi MiniTablineHidden guibg=#050505")
+		vim.cmd("hi MiniTablineVisible guibg=#050505")
+		vim.cmd("hi MiniTablineModifiedVisible guibg=#050505")
+	end
+
 	if color == "kintsugi-dark" then
 		vim.cmd("hi Comment guifg=#6f7b68")
 		vim.cmd("hi @comment guifg=#6f7b68")

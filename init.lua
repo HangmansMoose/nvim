@@ -135,7 +135,7 @@ do
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -160,7 +160,7 @@ do
   vim.o.smartcase = true
 
   -- Keep signcolumn on by default
-  vim.o.signcolumn = 'yes'
+  vim.o.signcolumn = 'no'
 
   -- Decrease update time
   vim.o.updatetime = 250
@@ -202,6 +202,7 @@ do
   vim.o.shiftwidth = 4
 
   vim.opt.swapfile = false
+  vim.o.wrap = false
 
   -- Neovide ===============================================================
   vim.g.neovide_cursor_animation_length = 0
@@ -210,7 +211,7 @@ do
   vim.g.neovide_scroll_animation_length = 0.15
   vim.g.neovide_refresh_rate = 144
   vim.g.neovide_position_animation_length = 0
-  vim.o.guifont = "CaskaydiaMono_NF:Medium:h13:#e-subpixelantialias"
+  vim.o.guifont = "BlexMono_NF:Medium:h14:#e-subpixelantialias"
   vim.g.neovide_opacity = 1.00
   vim.g.neovide_normal_opacity = 1.00
   vim.g.neovide_title_background_color = "#050505"
@@ -1020,17 +1021,28 @@ do
     'https://github.com/WTFox/jellybeans.nvim',
     'https://github.com/blazkowolf/gruber-darker.nvim',
     'https://github.com/rebelot/kanagawa.nvim',
-    'https://github.com/alljokecake/naysayer-theme.nvim',
+    --'https://github.com/alljokecake/naysayer-theme.nvim',
     'https://github.com/savq/melange-nvim',
-    'https://github.com/tjdevries/colorbuddy.nvim',
+    --'https://github.com/tjdevries/colorbuddy.nvim',
     'https://github.com/54L1M/Oshen.nvim',
-    'https://github.com/szymonwilczek/arete.nvim'
+    --'https://github.com/szymonwilczek/arete.nvim'
+    'https://github.com/oskarnurm/koda.nvim',
+	  'https://github.com/metalelf0/kintsugi-nvim',
+	  'https://github.com/rose-pine/neovim',
+	  'https://github.com/armannikoyan/rusty',
+	  'https://github.com/aliqyan-21/darkvoid.nvim',
+	  'https://github.com/kuri-sun/yoda.nvim',
+	  'https://github.com/NLKNguyen/papercolor-theme',
+	  'https://github.com/RostislavArts/naysayer.nvim',
+	  'https://github.com/dchinmay2/alabaster.nvim',
+	  'https://github.com/lodestone/lodestone.vim',
+
   })
   -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
   local colours = require('utils.colors')
-  colours.CustomColourscheme('kujukuju')
+  colours.CustomColourscheme('kanagawa')
 
   vim.api.nvim_create_user_command("Colour", function(args)
       local scheme = args.fargs[1]
@@ -1072,11 +1084,11 @@ do
   }
 
 
-  -- require 'kickstart.plugins.debug'
+  require 'kickstart.plugins.debug'
   -- require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
-  -- require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
+  require 'kickstart.plugins.autopairs'
+  require 'kickstart.plugins.neo-tree'
   -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
