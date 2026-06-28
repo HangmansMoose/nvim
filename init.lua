@@ -540,7 +540,30 @@ do
     -- You can put your default mappings / updates / etc. in here
     --  All the info you're looking for is in `:help telescope.setup()`
     --
-    -- defaults = {
+     defaults = {
+      file_ignore_patterns = {
+    	  "libs/",
+    	  "Libs/",
+ 		    "includes/",
+ 		    "Includes/",
+ 		    "build/",
+ 		    "Build/",
+        "bin/",
+        "Bin/",
+        "thirdparty/",
+        "Thirdparty/",
+        "dependencies/",
+        "Dependencies/",
+        "%.lib",
+        "%.dll",
+ 		    "%.so",
+ 		    "%.exe",
+ 		    "%.pdb",
+ 		    "%.rdi",
+ 		    "%.obj",
+        "%.spv",
+      }
+    },
     --   mappings = {
     --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
     --   },
@@ -1042,7 +1065,7 @@ do
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
   local colours = require('utils.colors')
-  colours.CustomColourscheme('kanagawa')
+  colours.CustomColourscheme('lodestone')
 
   vim.api.nvim_create_user_command("Colour", function(args)
       local scheme = args.fargs[1]
