@@ -218,14 +218,14 @@ function M.CustomColourscheme(color)
 		vim.cmd("hi SnacksNormalNC guibg=#151515")
 	end
 
-	if color == "neohybrid" then
-		vim.cmd("hi Normal guibg=#121212")
-		vim.cmd("hi NormalNC guibg=#121212")
+	if color == "oshen-night" then
+		vim.cmd("hi Normal guibg=#050505")
+		vim.cmd("hi NormalNC guibg=#050505")
 		--vim.cmd'hi TabLine guifg=#e6dbd1'
 		--vim.cmd'hi TabLineNC guifg=#151515'
 		--vim.cmd'hi CursorLine guibg=#111144'
-		vim.cmd("hi Cursor guibg=#00ff33 guifg=#303030")
-		vim.cmd("hi cTodo guibg=#121212")
+		--vim.cmd("hi Cursor guibg=#00ff33 guifg=#303030")
+		--vim.cmd("hi cTodo guibg=#121212")
 	end
 
 	-- an attempt to remove italics from all themes

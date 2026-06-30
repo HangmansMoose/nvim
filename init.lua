@@ -1065,7 +1065,7 @@ do
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
   local colours = require('utils.colors')
-  colours.CustomColourscheme('lodestone')
+  colours.CustomColourscheme('oshen-night')
 
   vim.api.nvim_create_user_command("Colour", function(args)
       local scheme = args.fargs[1]
@@ -1111,13 +1111,15 @@ do
   -- require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   require 'kickstart.plugins.autopairs'
-  require 'kickstart.plugins.neo-tree'
+  -- require 'kickstart.plugins.neo-tree'
+  require 'kickstart.plugins.snacks'
   -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   -- require 'custom.plugins'
+  
 end
 
 
