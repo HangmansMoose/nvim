@@ -117,6 +117,9 @@ do
   -- Enable faster startup by caching compiled Lua modules
   vim.loader.enable()
 
+  -- Enable use of .nvim.lua/.exrc/.nvimrc in project directories for project specific
+  -- config
+  vim.o.exrc = true
   -- Set <space> as the leader key
   -- See `:help mapleader`
   --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -388,23 +391,23 @@ do
   --
   -- We first install it from https://github.com/NMAC427/guess-indent.nvim
   -- and then call its `setup()` function to start it with default settings.
-  vim.pack.add { gh 'NMAC427/guess-indent.nvim' }
-  require('guess-indent').setup {}
+  --vim.pack.add { gh 'NMAC427/guess-indent.nvim' }
+  --require('guess-indent').setup {}
 
   -- Here is a more advanced configuration example that passes options to `gitsigns.nvim`
   --
   -- See `:help gitsigns` to understand what each configuration key does.
   -- Adds git related signs to the gutter, as well as utilities for managing changes
-  vim.pack.add { gh 'lewis6991/gitsigns.nvim' }
-  require('gitsigns').setup {
-    signs = {
-      add = { text = '+' }, ---@diagnostic disable-line: missing-fields
-      change = { text = '~' }, ---@diagnostic disable-line: missing-fields
-      delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
-      topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
-      changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
-    },
-  }
+  --vim.pack.add { gh 'lewis6991/gitsigns.nvim' }
+  --require('gitsigns').setup {
+  --  signs = {
+  --    add = { text = '+' }, ---@diagnostic disable-line: missing-fields
+  --    change = { text = '~' }, ---@diagnostic disable-line: missing-fields
+  --    delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
+  --    topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
+  --    changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
+  --  },
+  --}
 
   -- Useful plugin to show you pending keybinds.
   vim.pack.add { gh 'folke/which-key.nvim' }
@@ -427,13 +430,13 @@ do
   -- change the command under that to load whatever the name of that colorscheme is.
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  vim.pack.add { gh 'folke/tokyonight.nvim' }
-  ---@diagnostic disable-next-line: missing-fields
-  require('tokyonight').setup {
-    styles = {
-      comments = { italic = false }, -- Disable italics in comments
-    },
-  }
+  --vim.pack.add { gh 'folke/tokyonight.nvim' }
+  -----@diagnostic disable-next-line: missing-fields
+  --require('tokyonight').setup {
+  --  styles = {
+  --    comments = { italic = false }, -- Disable italics in comments
+  --  },
+  --}
 
   -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
@@ -442,8 +445,8 @@ do
 
 
   -- Highlight todo, notes, etc in comments
-  vim.pack.add { gh 'folke/todo-comments.nvim' }
-  require('todo-comments').setup { signs = false }
+  --vim.pack.add { gh 'folke/todo-comments.nvim' }
+  --require('todo-comments').setup { signs = false }
 
   -- [[ mini.nvim ]]
   --  A collection of various small independent plugins/modules
@@ -493,6 +496,76 @@ do
 
   -- ... and there is more!
   --  Check out: https://github.com/nvim-mini/mini.nvim
+  local win_config = function()
+    local height = math.floor(0.618 * vim.o.lines)
+    local width = math.floor(0.618 * vim.o.columns)
+    return {
+      anchor = 'NW', height = height, width = width,
+      row = math.floor(0.5 * (vim.o.lines - height)),
+      col = math.floor(0.5 * (vim.o.columns - width)),
+    }
+  end
+  require('mini.pick').setup({
+   window = { config = win_config }
+  })
+
+  require('mini.files').setup({ windows = { preview = true } })
+
+  -- Setup keymaps for mini funcs
+  -- Helpers for a more concise `<Leader>` mappings.
+-- Most of the mappings use `<Cmd>...<CR>` string as a right hand side (RHS) in
+-- an attempt to be more concise yet descriptive. See `:h <Cmd>`.
+-- This approach also doesn't require the underlying commands/functions to exist
+-- during mapping creation: a "lazy loading" approach to improve startup time.
+local nmap_leader = function(suffix, rhs, desc)
+  vim.keymap.set('n', '<Leader>' .. suffix, rhs, { desc = desc })
+end
+local xmap_leader = function(suffix, rhs, desc)
+  vim.keymap.set('x', '<Leader>' .. suffix, rhs, { desc = desc })
+end
+
+-- b is for 'Buffer'. Common usage:
+-- - `<Leader>bs` - create scratch (temporary) buffer
+-- - `<Leader>ba` - navigate to the alternative buffer
+-- - `<Leader>bw` - wipeout (fully delete) current buffer
+local new_scratch_buffer = function()
+  vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(true, true))
+end
+
+nmap_leader('ba', '<Cmd>b#<CR>',                                 'Alternate')
+nmap_leader('bd', '<Cmd>lua MiniBufremove.delete()<CR>',         'Delete')
+nmap_leader('bD', '<Cmd>lua MiniBufremove.delete(0, true)<CR>',  'Delete!')
+nmap_leader('bs', new_scratch_buffer,                            'Scratch')
+nmap_leader('bw', '<Cmd>lua MiniBufremove.wipeout()<CR>',        'Wipeout')
+nmap_leader('bW', '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
+
+-- e is for 'Explore' and 'Edit'. Common usage:
+-- - `<Leader>ed` - open explorer at current working directory
+-- - `<Leader>ef` - open directory of current file (needs to be present on disk)
+-- - `<Leader>ei` - edit 'init.lua'
+-- - All mappings that use `edit_plugin_file` - edit 'plugin/' config files
+local edit_plugin_file = function(filename)
+  return string.format('<Cmd>edit %s/plugin/%s<CR>', vim.fn.stdpath('config'), filename)
+end
+local explore_at_file = '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>'
+local explore_quickfix = function()
+  vim.cmd(vim.fn.getqflist({ winid = true }).winid ~= 0 and 'cclose' or 'copen')
+end
+local explore_locations = function()
+  vim.cmd(vim.fn.getloclist(0, { winid = true }).winid ~= 0 and 'lclose' or 'lopen')
+end
+
+nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>',          'Directory')
+nmap_leader('ef', explore_at_file,                          'File directory')
+nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>',                 'init.lua')
+-- nmap_leader('ek', edit_plugin_file('20_keymaps.lua'),       'Keymaps config')
+-- nmap_leader('em', edit_plugin_file('30_mini.lua'),          'MINI config')
+nmap_leader('en', '<Cmd>lua MiniNotify.show_history()<CR>', 'Notifications')
+-- nmap_leader('eo', edit_plugin_file('10_options.lua'),       'Options config')
+-- nmap_leader('ep', edit_plugin_file('40_plugins.lua'),       'Plugins config')
+nmap_leader('eq', explore_quickfix,                         'Quickfix list')
+nmap_leader('eQ', explore_locations,                        'Location list')
+
 end
 
 -- ============================================================
@@ -722,37 +795,37 @@ do
       --    See `:help CursorHold` for information about when this is executed
       --
       -- When you move your cursor, the highlights will be cleared (the second autocommand).
-      local client = vim.lsp.get_client_by_id(event.data.client_id)
-      if client and client:supports_method('textDocument/documentHighlight', event.buf) then
-        local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-        vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-          buffer = event.buf,
-          group = highlight_augroup,
-          callback = vim.lsp.buf.document_highlight,
-        })
+      -- local client = vim.lsp.get_client_by_id(event.data.client_id)
+      --if client and client:supports_method('textDocument/documentHighlight', event.buf) then
+      --  local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+      --  vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+      --    buffer = event.buf,
+      --    group = highlight_augroup,
+      --    callback = vim.lsp.buf.document_highlight,
+      --  })
 
-        vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-          buffer = event.buf,
-          group = highlight_augroup,
-          callback = vim.lsp.buf.clear_references,
-        })
+      --  vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+      --    buffer = event.buf,
+      --    group = highlight_augroup,
+      --    callback = vim.lsp.buf.clear_references,
+      --  })
 
-        vim.api.nvim_create_autocmd('LspDetach', {
-          group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-          callback = function(event2)
-            vim.lsp.buf.clear_references()
-            vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-          end,
-        })
-      end
+      --  vim.api.nvim_create_autocmd('LspDetach', {
+      --    group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+      --    callback = function(event2)
+      --      vim.lsp.buf.clear_references()
+      --      vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+      --    end,
+      --  })
+      --end
 
       -- The following code creates a keymap to toggle inlay hints in your
       -- code, if the language server you are using supports them
       --
       -- This may be unwanted, since they displace some of your code
-      if client and client:supports_method('textDocument/inlayHint', event.buf) then
-        map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
-      end
+      --if client and client:supports_method('textDocument/inlayHint', event.buf) then
+        --map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
+      --end
     end,
   })
 
@@ -1046,9 +1119,7 @@ do
     'https://github.com/rebelot/kanagawa.nvim',
     --'https://github.com/alljokecake/naysayer-theme.nvim',
     'https://github.com/savq/melange-nvim',
-    --'https://github.com/tjdevries/colorbuddy.nvim',
     'https://github.com/54L1M/Oshen.nvim',
-    --'https://github.com/szymonwilczek/arete.nvim'
     'https://github.com/oskarnurm/koda.nvim',
 	  'https://github.com/metalelf0/kintsugi-nvim',
 	  'https://github.com/rose-pine/neovim',
@@ -1059,13 +1130,26 @@ do
 	  'https://github.com/RostislavArts/naysayer.nvim',
 	  'https://github.com/dchinmay2/alabaster.nvim',
 	  'https://github.com/lodestone/lodestone.vim',
+	  'https://github.com/webhooked/kanso.nvim',
 
   })
-  -- Load the colorscheme here.
+
+  require('kanso').setup({
+    bold = false,
+    italics = false,
+  })
+ -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
   local colours = require('utils.colors')
-  colours.CustomColourscheme('oshen-night')
+  --  Corrected the issue of the customisations in color.lua not being applied on 
+  --  startup by deferring it to run when UIEnter is called the first time
+  vim.api.nvim_create_autocmd('UIEnter', {
+    once = true,
+    callback =  function()
+      colours.CustomColourscheme("kanso-ink")
+    end,
+  })
 
   vim.api.nvim_create_user_command("Colour", function(args)
       local scheme = args.fargs[1]
@@ -1112,7 +1196,7 @@ do
   -- require 'kickstart.plugins.lint'
   require 'kickstart.plugins.autopairs'
   -- require 'kickstart.plugins.neo-tree'
-  require 'kickstart.plugins.snacks'
+  -- require 'kickstart.plugins.overseer'
   -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -1120,8 +1204,27 @@ do
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   -- require 'custom.plugins'
   
+  -- OVERSEER
+  vim.pack.add {gh 'stevearc/overseer.nvim'}
+  require('overseer').setup({
+    component_aliases = {
+      default = {
+        { "open_output", on_start = "always", direction = "vertical" },
+        "on_exit_set_status",
+        "on_complete_notify",
+        { "on_complete_dispose", require_view = { "SUCCESS", "FAILURE" } },
+      },
+    },
+  })
 end
 
+vim.keymap.set("n", "<leader>mm", function()
+  require("overseer").run_task({ name = "project build" })
+end, { desc = "Run project build" })
+
+vim.keymap.set("n", "<leader>mr", function()
+  require("overseer").run_task({ name = "project build and run" })
+end, { desc = "Run project build and run" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
