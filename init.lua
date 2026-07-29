@@ -116,6 +116,8 @@ require('vim._core.ui2').enable({
 do
   -- Enable faster startup by caching compiled Lua modules
   vim.loader.enable()
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
 
   -- Enable use of .nvim.lua/.exrc/.nvimrc in project directories for project specific
   -- config
@@ -214,7 +216,7 @@ do
   vim.g.neovide_scroll_animation_length = 0.15
   vim.g.neovide_refresh_rate = 144
   vim.g.neovide_position_animation_length = 0
-  vim.o.guifont = "BlexMono_NF:Medium:h14:#e-subpixelantialias"
+  --vim.o.guifont = "MonaspiceNe_NF:Medium:h14:#e-subpixelantialias"
   vim.g.neovide_opacity = 1.00
   vim.g.neovide_normal_opacity = 1.00
   vim.g.neovide_title_background_color = "#050505"
@@ -555,7 +557,7 @@ local explore_locations = function()
   vim.cmd(vim.fn.getloclist(0, { winid = true }).winid ~= 0 and 'lclose' or 'lopen')
 end
 
-nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>',          'Directory')
+--nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>',          'Directory')
 nmap_leader('ef', explore_at_file,                          'File directory')
 nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>',                 'init.lua')
 -- nmap_leader('ek', edit_plugin_file('20_keymaps.lua'),       'Keymaps config')
@@ -1117,7 +1119,7 @@ do
     'https://github.com/WTFox/jellybeans.nvim',
     'https://github.com/blazkowolf/gruber-darker.nvim',
     'https://github.com/rebelot/kanagawa.nvim',
-    --'https://github.com/alljokecake/naysayer-theme.nvim',
+    'https://github.com/alljokecake/naysayer-theme.nvim',
     'https://github.com/savq/melange-nvim',
     'https://github.com/54L1M/Oshen.nvim',
     'https://github.com/oskarnurm/koda.nvim',
@@ -1127,7 +1129,6 @@ do
 	  'https://github.com/aliqyan-21/darkvoid.nvim',
 	  'https://github.com/kuri-sun/yoda.nvim',
 	  'https://github.com/NLKNguyen/papercolor-theme',
-	  'https://github.com/RostislavArts/naysayer.nvim',
 	  'https://github.com/dchinmay2/alabaster.nvim',
 	  'https://github.com/lodestone/lodestone.vim',
 	  'https://github.com/webhooked/kanso.nvim',
@@ -1147,7 +1148,7 @@ do
   vim.api.nvim_create_autocmd('UIEnter', {
     once = true,
     callback =  function()
-      colours.CustomColourscheme("kanso-ink")
+      colours.CustomColourscheme("kanso-zen")
     end,
   })
 
@@ -1195,8 +1196,8 @@ do
   -- require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
-  -- require 'kickstart.plugins.overseer'
+  require 'kickstart.plugins.neo-tree'
+  --require 'kickstart.plugins.overseer'
   -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
