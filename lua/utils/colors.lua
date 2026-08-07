@@ -28,7 +28,7 @@ function M.CustomColourscheme(color)
 		vim.cmd("hi MiniTablineModifiedVisible guibg=#000000")
 	end
 
-	if color == "kanso" or color == "kanso-ink" then
+	if color == "kanso" or color == "kanso-ink" or color == "kanso-zen" then
 		vim.cmd("hi Comment guifg=#6f7b68")
 		vim.cmd("hi @comment guifg=#6f7b68")
 		vim.cmd("hi Normal guibg=#050505")

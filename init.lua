@@ -118,6 +118,8 @@ do
   vim.loader.enable()
   vim.g.loaded_netrw = 1
   vim.g.loaded_netrwPlugin = 1
+  
+  vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
 
   -- Enable use of .nvim.lua/.exrc/.nvimrc in project directories for project specific
   -- config
@@ -209,6 +211,8 @@ do
   vim.opt.swapfile = false
   vim.o.wrap = false
 
+  vim.opt.termguicolors = true
+
   -- Neovide ===============================================================
   vim.g.neovide_cursor_animation_length = 0
   vim.g.neovide_cursor_trail_size = 0
@@ -216,7 +220,7 @@ do
   vim.g.neovide_scroll_animation_length = 0.15
   vim.g.neovide_refresh_rate = 144
   vim.g.neovide_position_animation_length = 0
-  --vim.o.guifont = "MonaspiceNe_NF:Medium:h14:#e-subpixelantialias"
+  vim.o.guifont = "MonaspiceNe_NF:Medium:h14:#e-subpixelantialias"
   vim.g.neovide_opacity = 1.00
   vim.g.neovide_normal_opacity = 1.00
   vim.g.neovide_title_background_color = "#050505"
@@ -511,7 +515,14 @@ do
    window = { config = win_config }
   })
 
-  require('mini.files').setup({ windows = { preview = true } })
+  require('mini.files').setup({ 
+    windows = { 
+      preview = true 
+    },
+    options = {
+      use_as_default_explorer = false
+    }
+  })
 
   -- Setup keymaps for mini funcs
   -- Helpers for a more concise `<Leader>` mappings.
@@ -1054,7 +1065,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'cpp', 'odin', 'zig', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer
@@ -1117,6 +1128,7 @@ do
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   vim.pack.add({
     'https://github.com/WTFox/jellybeans.nvim',
+    'https://github.com/WTFox/luna.nvim',
     'https://github.com/blazkowolf/gruber-darker.nvim',
     'https://github.com/rebelot/kanagawa.nvim',
     'https://github.com/alljokecake/naysayer-theme.nvim',
