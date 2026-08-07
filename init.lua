@@ -1147,10 +1147,7 @@ do
 
   })
 
-  require('kanso').setup({
-    bold = false,
-    italics = false,
-  })
+  
  -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
@@ -1160,7 +1157,7 @@ do
   vim.api.nvim_create_autocmd('UIEnter', {
     once = true,
     callback =  function()
-      colours.CustomColourscheme("kanso-zen")
+      colours.CustomColourscheme("luna")
     end,
   })
 
