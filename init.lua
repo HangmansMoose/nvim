@@ -1074,7 +1074,7 @@ do
   vim.api.nvim_create_autocmd('UIEnter', {
     once = true,
     callback =  function()
-      colours.CustomColourscheme("luna")
+      colours.CustomColourscheme("oshen-night")
     end,
   })
 

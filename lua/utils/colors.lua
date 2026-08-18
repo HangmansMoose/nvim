@@ -241,6 +241,12 @@ function M.CustomColourscheme(color)
 	if color == "oshen-night" then
 		vim.cmd("hi Normal guibg=#050505")
 		vim.cmd("hi NormalNC guibg=#050505")
+		vim.cmd("hi Comment guifg=#87919d")
+		vim.cmd("hi @comment guifg=#87919d")
+		vim.cmd("hi @lsp.type.comment guifg=#87919d")
+		--vim.cmd("hi LineNr guibg=#050505")
+		vim.cmd("hi LineNrAbove guifg=#87919d")
+		vim.cmd("hi LineNrBelow guifg=#87919d")
 		--vim.cmd'hi TabLine guifg=#e6dbd1'
 		--vim.cmd'hi TabLineNC guifg=#151515'
 		--vim.cmd'hi CursorLine guibg=#111144'
