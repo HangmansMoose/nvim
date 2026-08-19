@@ -1049,19 +1049,15 @@ do
     'https://github.com/blazkowolf/gruber-darker.nvim',
     'https://github.com/rebelot/kanagawa.nvim',
     'https://github.com/alljokecake/naysayer-theme.nvim',
-    'https://github.com/savq/melange-nvim',
     'https://github.com/54L1M/Oshen.nvim',
     'https://github.com/oskarnurm/koda.nvim',
 	  'https://github.com/metalelf0/kintsugi-nvim',
-	  'https://github.com/rose-pine/neovim',
-	  'https://github.com/armannikoyan/rusty',
-	  'https://github.com/aliqyan-21/darkvoid.nvim',
 	  'https://github.com/kuri-sun/yoda.nvim',
-	  'https://github.com/NLKNguyen/papercolor-theme',
 	  'https://github.com/dchinmay2/alabaster.nvim',
 	  'https://github.com/lodestone/lodestone.vim',
 	  'https://github.com/webhooked/kanso.nvim',
-
+    'https://github.com/datsfilipe/vesper.nvim',
+    'https://github.com/ThorstenRhau/token'
   })
 
   
@@ -1074,7 +1070,7 @@ do
   vim.api.nvim_create_autocmd('UIEnter', {
     once = true,
     callback =  function()
-      colours.CustomColourscheme("luna")
+      colours.CustomColourscheme("koda-moss")
     end,
   })
 
