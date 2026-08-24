@@ -1083,12 +1083,15 @@ do
       complete = "color"
     }
   )
-  --if vim.g.neovide then
-  --  vim.g.neovide_title_background_color = string.format(
-  --    "%x",
-  --    vim.api.nvim_get_hl(0, {id=vim.api.nvim_get_hl_id_by_name("Normal")}).bg
-  --  )
-  --end
+  
+  -- TROUBLE ==============================================
+  vim.pack.add { gh 'folke/trouble.nvim'}
+	require('trouble').setup()
+
+  vim.keymap.set('n','<leader>tt', '<Cmd>Trouble diagnostics toggle<CR>', {desc = 'Toggle Trouble'})
+  vim.keymap.set('n','<leader>tq', '<Cmd>Trouble qflist toggle<CR>', { desc = 'Toggle Trouble qflist' })
+  vim.keymap.set('n','<leader>tl', '<Cmd>Trouble lsp toggle focus=false win.position=below<CR>', {desc = 'Toggle Trouble LSP only' })
+  
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup {
