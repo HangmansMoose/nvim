@@ -129,6 +129,7 @@ do
   vim.o.wrap = false
 
   vim.opt.termguicolors = true
+  vim.o.makeprg = "build.bat"
 
   -- Neovide ===============================================================
   vim.g.neovide_cursor_animation_length = 0
@@ -141,6 +142,7 @@ do
   vim.g.neovide_opacity = 1.00
   vim.g.neovide_normal_opacity = 1.00
   vim.g.neovide_title_background_color = "#050505"
+  vim.o.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor"
 
 end
 
@@ -1035,6 +1037,8 @@ end
 -- kickstart.plugins.* examples
 -- ============================================================
 do
+  require 'plugins.autopairs'
+  require 'plugins.neo-tree'
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1043,7 +1047,90 @@ do
   --
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
-  vim.pack.add({
+    -- TROUBLE ==============================================
+  vim.pack.add { gh 'folke/trouble.nvim'}
+	require('trouble').setup()
+
+  vim.keymap.set('n','<leader>tt', '<Cmd>Trouble diagnostics toggle<CR>', {desc = 'Toggle Trouble'})
+  vim.keymap.set('n','<leader>tq', '<Cmd>Trouble qflist toggle<CR>', { desc = 'Toggle Trouble qflist' })
+  vim.keymap.set('n','<leader>tl', '<Cmd>Trouble lsp toggle focus=false win.position=below<CR>', {desc = 'Toggle Trouble LSP only' })
+  
+  -- Highlight todo, notes, etc in comments
+  vim.pack.add { gh 'folke/todo-comments.nvim' }
+  require('todo-comments').setup {
+    keywords = {
+			TODO = { color = "#ff0000" },
+			HACK = { color = "#ff6600" },
+			NOTE = { color = "#008000" },
+			FIXME = { color = "#f06292" },
+			LEFTOFF = { color = "#ffff99" },
+			nocheckin = { color = "#ff00ff" },
+		},
+				-- Pattern to hightlight the keywords
+		highlight = {
+			pattern = [[(KEYWORDS|keywords)\s*(\([^\)]*\))?:]],
+			keyword = "fg",
+			after = "",
+			before = "",
+		},
+		gui_style = {
+			fg = "BOLD",
+		},
+    signs = false, 
+  }
+
+
+  -- OVERSEER
+  vim.pack.add {gh 'stevearc/overseer.nvim'}
+  require('overseer').setup({
+    component_aliases = {
+      default = {
+        { "open_output", on_start = "always", direction = "vertical" },
+        "on_exit_set_status",
+        "on_complete_notify",
+        { "on_complete_dispose", require_view = { "SUCCESS", "FAILURE" } },
+      },
+    },
+  })
+  
+  -- This function runs the most recent overseer command
+    vim.api.nvim_create_user_command("OverseerRestartLast", function()
+    local overseer = require("overseer")
+    local task_list = require("overseer.task_list")
+    local tasks = overseer.list_tasks({ status = {
+      overseer.STATUS.SUCCESS,
+      overseer.STATUS.FAILURE,
+      overseer.STATUS.CANCELED,
+    }, sort = task_list.sort_finished_recently })
+    if vim.tbl_isempty(tasks) then
+      vim.notify("No tasks found", vim.log.levels.WARN)
+    else
+      local most_recent = tasks[1]
+      overseer.run_action(most_recent, "restart")
+    end
+  end, {})
+
+  -- Stop linewrapping in qf list
+
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "qf",
+    callback = function()
+      vim.opt_local.wrap = false
+    end,
+  })
+end
+
+vim.keymap.set("n", "<leader>or", "<cmd>OverseerRestartLast<cr>", {desc = "[O]verseer [R]estart last"})
+
+vim.keymap.set("n", "<leader>mm", function()
+  require("overseer").run_task({ name = "project build" })
+end, { desc = "Run project build" })
+
+vim.keymap.set("n", "<leader>mr", function()
+  require("overseer").run_task({ name = "project build and run" })
+end, { desc = "Run project build and run" })
+
+vim.pack.add({
     'https://github.com/WTFox/jellybeans.nvim',
     'https://github.com/WTFox/luna.nvim',
     'https://github.com/blazkowolf/gruber-darker.nvim',
@@ -1083,68 +1170,6 @@ do
       complete = "color"
     }
   )
-  
-  -- TROUBLE ==============================================
-  vim.pack.add { gh 'folke/trouble.nvim'}
-	require('trouble').setup()
-
-  vim.keymap.set('n','<leader>tt', '<Cmd>Trouble diagnostics toggle<CR>', {desc = 'Toggle Trouble'})
-  vim.keymap.set('n','<leader>tq', '<Cmd>Trouble qflist toggle<CR>', { desc = 'Toggle Trouble qflist' })
-  vim.keymap.set('n','<leader>tl', '<Cmd>Trouble lsp toggle focus=false win.position=below<CR>', {desc = 'Toggle Trouble LSP only' })
-  
-  -- Highlight todo, notes, etc in comments
-  vim.pack.add { gh 'folke/todo-comments.nvim' }
-  require('todo-comments').setup {
-    keywords = {
-			TODO = { color = "#ff0000" },
-			HACK = { color = "#ff6600" },
-			NOTE = { color = "#008000" },
-			FIXME = { color = "#f06292" },
-			LEFTOFF = { color = "#ffff99" },
-			nocheckin = { color = "#ff00ff" },
-		},
-				-- Pattern to hightlight the keywords
-		highlight = {
-			pattern = [[(KEYWORDS|keywords)\s*(\([^\)]*\))?:]],
-			keyword = "fg",
-			after = "",
-			before = "",
-		},
-		gui_style = {
-			fg = "BOLD",
-		},
-    signs = false, 
-  }
-
-
-  require 'plugins.autopairs'
-  require 'plugins.neo-tree'
-
-  -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-
-  -- OVERSEER
-  vim.pack.add {gh 'stevearc/overseer.nvim'}
-  require('overseer').setup({
-    component_aliases = {
-      default = {
-        { "open_output", on_start = "always", direction = "vertical" },
-        "on_exit_set_status",
-        "on_complete_notify",
-        { "on_complete_dispose", require_view = { "SUCCESS", "FAILURE" } },
-      },
-    },
-  })
-end
-
-vim.keymap.set("n", "<leader>mm", function()
-  require("overseer").run_task({ name = "project build" })
-end, { desc = "Run project build" })
-
-vim.keymap.set("n", "<leader>mr", function()
-  require("overseer").run_task({ name = "project build and run" })
-end, { desc = "Run project build and run" })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
