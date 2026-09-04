@@ -133,10 +133,10 @@ do
   vim.o.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor"
 
   -- Neovide ===============================================================
-  vim.g.neovide_cursor_animation_length = 0.1
-  vim.g.neovide_cursor_trail_size = 0.2
+  vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_cursor_trail_size = 0
   vim.g.neovide_cursor_animate_command_line = true
-  vim.g.neovide_scroll_animation_length = 0.15
+  vim.g.neovide_scroll_animation_length = 0.10
   vim.g.neovide_refresh_rate = 60
   vim.g.neovide_position_animation_length = 0
   vim.g.neovide_opacity = 1.00
@@ -546,6 +546,7 @@ do
     --  All the info you're looking for is in `:help telescope.setup()`
     --
      defaults = {
+      borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
       file_ignore_patterns = {
     	  "libs/",
     	  "Libs/",
