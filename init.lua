@@ -132,16 +132,17 @@ do
   vim.o.makeprg = "build.bat"
 
   -- Neovide ===============================================================
-  vim.g.neovide_cursor_animation_length = 0
-  vim.g.neovide_cursor_trail_size = 0
+  vim.g.neovide_cursor_animation_length = 0.1
+  vim.g.neovide_cursor_trail_size = 0.2
   vim.g.neovide_cursor_animate_command_line = true
   vim.g.neovide_scroll_animation_length = 0.15
   vim.g.neovide_refresh_rate = 144
   vim.g.neovide_position_animation_length = 0
-  vim.o.guifont = "MonaspiceNe_NF:Medium:h14:#e-subpixelantialias"
   vim.g.neovide_opacity = 1.00
   vim.g.neovide_normal_opacity = 1.00
   vim.g.neovide_title_background_color = "#050505"
+  vim.o.guifont = "CaskaydiaMono_NF:Medium:h13:#e-subpixelantialias"
+  --vim.o.guifont = "CaskaydiaMono_NF:Medium:h13"
   vim.o.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor"
 
 end
@@ -1157,7 +1158,7 @@ vim.pack.add({
   vim.api.nvim_create_autocmd('UIEnter', {
     once = true,
     callback =  function()
-      colours.CustomColourscheme("koda-moss")
+      colours.CustomColourscheme("kanso-ink")
     end,
   })
 
