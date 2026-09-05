@@ -71,8 +71,15 @@ function M.CustomColourscheme(color)
 		-- because when vim.cmd is used it has to string parse the args 
 		-- and pass them to the hilight function, whereas the api call
 		-- it only has to pass a lua table
-		vim.api.nvim_set_hl(0, "Comment", { fg = "#6f7b68" })
-		vim.api.nvim_set_hl(0, "@comment", { fg = "#6f7b68" })
+		vim.api.nvim_set_hl(0, "Comment", { fg = "#727169" })
+		vim.api.nvim_set_hl(0, "@comment", { fg = "#727169" })
+		vim.api.nvim_set_hl(0, "@lsp.type.enumMember", { fg = "#dfdf8e" })
+		vim.api.nvim_set_hl(0, "@lsp.type.enum", { fg = "#708b8d" })
+		vim.api.nvim_set_hl(0, "@type", { fg = "#708b8d" })
+		vim.api.nvim_set_hl(0, "@type.builtin", { fg = "#708b8d" })
+		vim.api.nvim_set_hl(0, "@function", { fg = "#71ade7" })
+		vim.api.nvim_set_hl(0, "@function.call", { fg = "#7aade7" })
+		vim.api.nvim_set_hl(0, "@operator", { fg = "#708b8d" })
 		vim.api.nvim_set_hl(0, "Normal", { bg = "#050505" })
 		vim.api.nvim_set_hl(0, "NormalNC", { bg = "#050505" })
 		vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "#050505" }) -- This is also the background of the default splash screen
@@ -92,44 +99,17 @@ function M.CustomColourscheme(color)
 		vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "#050505" })
 		vim.api.nvim_set_hl(0, "TelescopeResultsTitle", { bg = "#dbad49", fg = "#050505" })
 		vim.api.nvim_set_hl(0, "MiniStatuslineFilename", { bg = "#050505" })
-		vim.api.nvim_set_hl(0, "MiniStatuslineDevinfo", { bg = "#050505" })
+		vim.api.nvim_set_hl(0, "MiniStatuslineDevinfo", { bg = "#161f20" })
 		vim.api.nvim_set_hl(0, "MiniTablineCurrent", { bg = "#151515" })
 		vim.api.nvim_set_hl(0, "MiniTablineFill", { bg = "#050505" })
 		vim.api.nvim_set_hl(0, "MiniTablineModifiedHidden", { bg = "#050505" })
 		vim.api.nvim_set_hl(0, "MiniTablineHidden", { bg = "#050505" })
 		vim.api.nvim_set_hl(0, "MiniTablineVisible", { bg = "#050505" })
 		vim.api.nvim_set_hl(0, "MiniTablineModifiedVisible", { bg = "#050505" })
-
- 		--hl.TelescopeNormal            = { fg = p.fg_dim, bg = bg_float }
-  		--hl.TelescopeBorder            = { fg = p.border, bg = bg_float }
-  		--hl.TelescopePromptNormal      = { fg = p.fg, bg = p.bg_dropdown }
-  		--hl.TelescopePromptBorder      = { fg = p.bg_dropdown, bg = p.bg_dropdown }
-  		--hl.TelescopePromptTitle       = { fg = p.bg, bg = p.accent, bold = true }
-  		--hl.TelescopePromptPrefix      = { fg = p.accent, bg = p.bg_dropdown }
-  		--hl.TelescopePromptCounter     = { fg = p.fg_mute, bg = p.bg_dropdown }
-  		--hl.TelescopeResultsNormal     = { fg = p.fg_dim, bg = bg_float }
-  		--hl.TelescopeResultsBorder     = { fg = bg_float, bg = bg_float }
-  		--hl.TelescopeResultsTitle      = { fg = bg_float, bg = bg_float }
-  		--hl.TelescopePreviewNormal     = { fg = p.fg_dim, bg = bg_float }
-  		--hl.TelescopePreviewBorder     = { fg = bg_float, bg = bg_float }
-  		--hl.TelescopePreviewTitle      = { fg = p.bg, bg = p.green, bold = true }
-  		--hl.TelescopeSelection         = { fg = p.fg, bg = p.bg_menu_sel, bold = true }
-  		--hl.TelescopeSelectionCaret    = { fg = p.accent, bg = p.bg_menu_sel }
-  		--hl.TelescopeMultiSelection    = { fg = p.accent }
-  		--hl.TelescopeMultiIcon         = { fg = p.accent }
-  		--hl.TelescopeMatching          = { fg = p.accent, bold = true }
-  		--hl.TelescopeResultsDiffAdd    = { fg = p.green }
-  		--hl.TelescopeResultsDiffChange = { fg = p.yellow }
-  		--hl.TelescopeResultsDiffDelete = { fg = p.red }
-  		--hl.TelescopeResultsDiffUntracked = { fg = p.green }
-  		--hl.TelescopeResultsClass      = { fg = s.type }
-  		--hl.TelescopeResultsField      = { fg = s.default }
-  		--hl.TelescopeResultsFunction   = { fg = s.func }
-  		--hl.TelescopeResultsMethod     = { fg = s.func }
-  		--hl.TelescopeResultsVariable   = { fg = s.default }
-  		--hl.TelescopeResultsComment    = { fg = s.comment }
-  		--hl.TelescopeResultsLineNr     = { fg = p.fg_mute }
-	end
+		vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "#050505" })
+		vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "#050505" })
+		vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "#050505" })
+ 		end
 
 	if color == "koda-moss" or color == "koda-dark" then
 		vim.api.nvim_set_hl(0, "Comment" , { fg = "#6f7b68" })
