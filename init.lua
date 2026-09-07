@@ -2,29 +2,29 @@
 -- are far too helpful to remove
 
 -- UI2 ==============================================================================================
-require('vim._core.ui2').enable({
-  enable = true, -- Whether to enable or disable the UI.
-  msg = { -- Options related to the message module.
-    ---@type 'cmd'|'msg' Default message target, either in the
-    ---cmdline or in a separate ephemeral message window.
-    ---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target
-    ---or table mapping |ui-messages| kinds and triggers to a target.
-    targets = 'cmd',
-    cmd = { -- Options related to messages in the cmdline window.
-      height = 0.5 -- Maximum height while expanded for messages beyond 'cmdheight'.
-    },
-    dialog = { -- Options related to dialog window.
-      height = 0.5, -- Maximum height.
-    },
-    msg = { -- Options related to msg window.
-      height = 0.5, -- Maximum height.
-      timeout = 4000, -- Time a message is visible in the message window.
-    },
-    pager = { -- Options related to message window.
-      height = 1, -- Maximum height.
-    },
-  },
-})
+--require('vim._core.ui2').enable({
+--  enable = true, -- Whether to enable or disable the UI.
+--  msg = { -- Options related to the message module.
+--    ---@type 'cmd'|'msg' Default message target, either in the
+--    ---cmdline or in a separate ephemeral message window.
+--    ---@type string|table<string, 'cmd'|'msg'|'pager'> Default message target
+--    ---or table mapping |ui-messages| kinds and triggers to a target.
+--    targets = 'cmd',
+--    cmd = { -- Options related to messages in the cmdline window.
+--      height = 0.5 -- Maximum height while expanded for messages beyond 'cmdheight'.
+--    },
+--    dialog = { -- Options related to dialog window.
+--      height = 0.5, -- Maximum height.
+--    },
+--    msg = { -- Options related to msg window.
+--      height = 0.5, -- Maximum height.
+--      timeout = 4000, -- Time a message is visible in the message window.
+--    },
+--    pager = { -- Options related to message window.
+--      height = 1, -- Maximum height.
+--    },
+--  },
+--})
 
 -- ============================================================
 -- SECTION 1: OPTIONS
@@ -130,7 +130,7 @@ do
   vim.o.wrap = false
 
   vim.opt.termguicolors = true
-  vim.o.makeprg = "build.bat"
+  -- vim.o.makeprg = "build"
   vim.o.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor/lCursor"
 
   -- Neovide ===============================================================
@@ -1082,55 +1082,28 @@ do
   }
 
 
-  -- OVERSEER
-  vim.pack.add {gh 'stevearc/overseer.nvim'}
-  require('overseer').setup({
-    component_aliases = {
-      default = {
-        { "open_output", on_start = "always", direction = "vertical" },
-        "on_exit_set_status",
-        "on_complete_notify",
-        { "on_complete_dispose", require_view = { "SUCCESS", "FAILURE" } },
-      },
-    },
-  })
-  
-  -- This function runs the most recent overseer command
-    vim.api.nvim_create_user_command("OverseerRestartLast", function()
-    local overseer = require("overseer")
-    local task_list = require("overseer.task_list")
-    local tasks = overseer.list_tasks({ status = {
-      overseer.STATUS.SUCCESS,
-      overseer.STATUS.FAILURE,
-      overseer.STATUS.CANCELED,
-    }, sort = task_list.sort_finished_recently })
-    if vim.tbl_isempty(tasks) then
-      vim.notify("No tasks found", vim.log.levels.WARN)
-    else
-      local most_recent = tasks[1]
-      overseer.run_action(most_recent, "restart")
+vim.pack.add { gh 'tpope/vim-dispatch'}
+
+vim.keymap.set('n', '<M-c>', function()
+  local qf_exists = false
+  -- check if any of the open buffers are the quickfix buffer
+  for _, win in pairs(vim.fn.getwininfo()) do
+    if win.quickfix == 1 then
+      qf_exists = true
     end
-  end, {})
+  end
 
-  -- Stop linewrapping in qf list
+  if qf_exists then
+    vim.cmd('cclose')
+  else
+    vim.cmd('copen')
+  end
+end, { desc = 'Toggle Quickfix Window' })
 
-  vim.api.nvim_create_autocmd("FileType", {
-    pattern = "qf",
-    callback = function()
-      vim.opt_local.wrap = false
-    end,
-  })
-end
+vim.keymap.set("n", "<M-n>", "<cmd>cnext<cr>", { desc = "Next Quickfix item" } )
+vim.keymap.set("n", "<M-p>", "<cmd>cprev<cr>", { desc = "Previous Quickfix item" } )
+vim.keymap.set("n", "<M-m>", "<cmd>Make<cr>", { desc = "[M]ake" } )
 
-vim.keymap.set("n", "<leader>or", "<cmd>OverseerRestartLast<cr>", {desc = "[O]verseer [R]estart last"})
-
-vim.keymap.set("n", "<leader>mm", function()
-  require("overseer").run_task({ name = "project build" })
-end, { desc = "Run project build" })
-
-vim.keymap.set("n", "<leader>mr", function()
-  require("overseer").run_task({ name = "project build and run" })
-end, { desc = "Run project build and run" })
 
 vim.pack.add({
     'https://github.com/WTFox/jellybeans.nvim',
@@ -1172,6 +1145,6 @@ vim.pack.add({
       complete = "color"
     }
   )
-
+end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
